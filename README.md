@@ -20,23 +20,71 @@ WebIntel is an advanced Python web-scraping platform designed as a production-st
 ## Architecture
 
 ```text
-Client
-  |
-  v
-FastAPI
-  |
-  v
-Redis Queue
-  |
-  v
-Celery Worker
-  |
-  +--> Requests + BeautifulSoup
-  |
-  +--> Playwright
-  |
-  v
-PostgreSQL
+WebIntel/
+├── alembic/                    # NEW: migrations
+│   ├── versions/
+│   └── env.py
+├── backend/
+│   └── app/
+│       ├── __init__.py
+│       ├── main.py             # FastAPI app (with lifespan)
+│       ├── config.py           # Pydantic Settings
+│       ├── database.py         # engine + session_scope
+│       ├── models.py           # SQLAlchemy 2.0 style
+│       ├── schemas.py          # split list/detail
+│       ├── scraper.py          # HTTP + browser scrapers
+│       ├── browser_pool.py     # NEW: shared Playwright context
+│       ├── ai_extractor.py     # JSON mode + validation
+│       ├── change_detector.py
+│       ├── tasks.py            # Celery with retries
+│       ├── security.py         # NEW: API key dep + SSRF guard
+│       └── exceptions.py       # NEW: custom exceptions
+├── crawler/
+│   └── spiders/generic.py
+├── tests/                      # NEW
+│   ├── conftest.py
+│   ├── test_api.py
+│   ├── test_scraper.py
+│   └── test_change_detector.py
+├── docker-compose.yml
+├── Dockerfile
+├── alembic.ini
+├── requirements.txt
+├── requirements-dev.txt
+├── .env.example
+└── README.mdWebIntel/
+├── alembic/                    # NEW: migrations
+│   ├── versions/
+│   └── env.py
+├── backend/
+│   └── app/
+│       ├── __init__.py
+│       ├── main.py             # FastAPI app (with lifespan)
+│       ├── config.py           # Pydantic Settings
+│       ├── database.py         # engine + session_scope
+│       ├── models.py           # SQLAlchemy 2.0 style
+│       ├── schemas.py          # split list/detail
+│       ├── scraper.py          # HTTP + browser scrapers
+│       ├── browser_pool.py     # NEW: shared Playwright context
+│       ├── ai_extractor.py     # JSON mode + validation
+│       ├── change_detector.py
+│       ├── tasks.py            # Celery with retries
+│       ├── security.py         # NEW: API key dep + SSRF guard
+│       └── exceptions.py       # NEW: custom exceptions
+├── crawler/
+│   └── spiders/generic.py
+├── tests/                      # NEW
+│   ├── conftest.py
+│   ├── test_api.py
+│   ├── test_scraper.py
+│   └── test_change_detector.py
+├── docker-compose.yml
+├── Dockerfile
+├── alembic.ini
+├── requirements.txt
+├── requirements-dev.txt
+├── .env.example
+└── README.md
 ```
 
 ## Requirements
