@@ -1,0 +1,44 @@
+services:
+  api:
+    build: .
+    container_name: webintel_api
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://webintel:webintel@postgres:5432/webintel
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+
+  worker:
+    build: .
+    container_name: webintel_worker
+    command: ["celery", "-A", "backend.app.tasks.celery_app", "worker", "--loglevel=info"]
+    environment:
+      DATABASE_URL: postgresql://webintel:webintel@postgres:5432/webintel
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:16
+    container_name: webintel_postgres
+    environment:
+      POSTGRES_USER: webintel
+      POSTGRES_PASSWORD: webintel
+      POSTGRES_DB: webintel
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: webintel_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
