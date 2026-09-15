@@ -93,7 +93,9 @@ WebIntel supports both traditional HTTP scraping and JavaScript-rendered website
                 │   HTTP Scraper  │         │    Playwright   │
                 │ Requests + BS4  │         │ Browser Engine  │
                 └────────┬────────┘         └────────┬────────┘
-                         │                           │
+                         │                           │    sting.
+
+
                          └─────────────┬─────────────┘
                                        │
                                        ▼
@@ -185,7 +187,9 @@ A client submits a scraping request through the FastAPI endpoint.
 
 ```text
 POST /api/scrape
-        │
+        │    sting.
+
+
         ▼
       Redis
         │
@@ -502,7 +506,9 @@ The HTTP scraper can use:
 
 ```text
 Requests
-   ↓
+   ↓    sting.
+
+
 HTML
    ↓
 BeautifulSoup / lxml
@@ -862,7 +868,9 @@ The Docker environment is designed around the following components:
 * [ ] Persistent URL frontier
 * [ ] URL canonicalization
 * [ ] Duplicate URL detection
-* [ ] Per-domain rate limiting
+* [ ] Per-domain rate limiting    sting.
+
+
 * [ ] Retry and failure queues
 
 ## Monitoring
