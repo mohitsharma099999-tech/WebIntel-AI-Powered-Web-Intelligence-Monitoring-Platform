@@ -164,9 +164,6 @@ class BrowserPool:
             "errors": 0,
         }
 
-    # ------------------------------------------------------------------ #
-    # Lifecycle
-    # ------------------------------------------------------------------ #
     async def start(self) -> None:
         """Start Playwright and pre-warm the minimum pool size."""
         async with self._lock:
@@ -248,9 +245,7 @@ class BrowserPool:
 
         logger.info("BrowserPool shut down. Stats: %s", self._stats)
 
-    # ------------------------------------------------------------------ #
-    # Acquire / Release
-    # ------------------------------------------------------------------ #
+    
     @asynccontextmanager
     async def acquire(self) -> AsyncIterator[Page]:
         """
@@ -315,9 +310,7 @@ class BrowserPool:
         finally:
             self._semaphore.release()
 
-    # ------------------------------------------------------------------ #
-    # Internal helpers
-    # ------------------------------------------------------------------ #
+    
     async def _get_or_create_instance(self) -> BrowserInstance:
         # Try to fetch an idle instance
         while True:
@@ -390,9 +383,7 @@ class BrowserPool:
         logger.debug("Discarding browser %s (reason=%s)", instance_id, reason)
         await instance.close()
 
-    # ------------------------------------------------------------------ #
-    # Maintenance loops
-    # ------------------------------------------------------------------ #
+  
     async def _health_check_loop(self) -> None:
         try:
             while not self._shutting_down:
@@ -432,9 +423,7 @@ class BrowserPool:
         except Exception as exc:  # pragma: no cover
             logger.exception("Recycle loop crashed: %s", exc)
 
-    # ------------------------------------------------------------------ #
-    # Introspection
-    # ------------------------------------------------------------------ #
+   
     @property
     def size(self) -> int:
         return len(self._instances)
