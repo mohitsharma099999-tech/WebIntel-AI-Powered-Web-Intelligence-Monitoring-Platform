@@ -11,9 +11,7 @@ from .utils import canonicalise
 log = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------------------------
-# 100 — Validation
-# ---------------------------------------------------------------------------
+
 class ValidationPipeline:
     """Reject items missing required fields or with empty content."""
 
@@ -40,9 +38,7 @@ class ValidationPipeline:
         return item
 
 
-# ---------------------------------------------------------------------------
-# 200 — De-duplication (in-memory; for distributed use, swap for Redis)
-# ---------------------------------------------------------------------------
+
 class DuplicateFilterPipeline:
     """Drop items whose canonical URL or content hash was seen this run."""
 
@@ -73,9 +69,7 @@ class DuplicateFilterPipeline:
         return item
 
 
-# ---------------------------------------------------------------------------
-# 300 — Persist to WebIntel PostgreSQL (same DB as FastAPI)
-# ---------------------------------------------------------------------------
+
 class DatabasePipeline:
     """Persist scraped items into the WebIntel `websites` / `pages` tables.
 
@@ -146,9 +140,7 @@ class DatabasePipeline:
         return item
 
 
-# ---------------------------------------------------------------------------
-# 400 — Optional AI enrichment (disabled unless OPENAI_API_KEY is set)
-# ---------------------------------------------------------------------------
+
 class AIExtractionPipeline:
     """Populate `ai_fields` using the backend extractor. Opt-in via spider attr."""
 
