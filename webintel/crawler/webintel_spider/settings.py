@@ -8,9 +8,7 @@ BOT_NAME = "webintel"
 SPIDER_MODULES = ["webintel_spider.spiders"]
 NEWSPIDER_MODULE = "webintel_spider.spiders"
 
-# ---------------------------------------------------------------------------
-# Identity / politeness
-# ---------------------------------------------------------------------------
+
 ROBOTSTXT_OBEY = True
 USER_AGENT = os.getenv(
     "CRAWLER_USER_AGENT",
@@ -22,45 +20,35 @@ CONCURRENT_REQUESTS = int(os.getenv("CRAWLER_CONCURRENCY", "8"))
 CONCURRENT_REQUESTS_PER_DOMAIN = int(os.getenv("CRAWLER_CONCURRENCY_PER_DOMAIN", "2"))
 CONCURRENT_REQUESTS_PER_IP = CONCURRENT_REQUESTS_PER_DOMAIN
 
-# ---------------------------------------------------------------------------
-# AutoThrottle — adaptive politeness
-# ---------------------------------------------------------------------------
+
 AUTOTHROTTLE_ENABLED = True
 AUTOTHROTTLE_START_DELAY = 1.0
 AUTOTHROTTLE_MAX_DELAY = 10.0
 AUTOTHROTTLE_TARGET_CONCURRENCY = 2.0
 AUTOTHROTTLE_DEBUG = False
 
-# Extra per-host throttle (see middlewares.py)
+# Extra per-host throttle 
 PER_DOMAIN_MIN_DELAY = 1.0
 PER_DOMAIN_JITTER = 0.5
 
-# ---------------------------------------------------------------------------
-# Retries / timeouts
-# ---------------------------------------------------------------------------
+
 RETRY_ENABLED = True
 RETRY_TIMES = 3
 RETRY_HTTP_CODES = [429, 500, 502, 503, 504, 522, 524, 408]
 DOWNLOAD_TIMEOUT = 30
 DNS_TIMEOUT = 15
 
-# ---------------------------------------------------------------------------
-# robots.txt cache (avoid re-fetching on every request)
-# ---------------------------------------------------------------------------
+
 ROBOTSTXT_CACHED = True
 
-# ---------------------------------------------------------------------------
-# HTTP cache — great for dev, disable in prod
-# ---------------------------------------------------------------------------
+
 HTTPCACHE_ENABLED = os.getenv("CRAWLER_HTTPCACHE", "0") == "1"
 HTTPCACHE_EXPIRATION_SECS = 3600
 HTTPCACHE_DIR = "httpcache"
 HTTPCACHE_IGNORE_HTTP_CODES = [500, 502, 503, 504, 400, 401, 403, 404, 429]
 HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 
-# ---------------------------------------------------------------------------
-# Middlewares
-# ---------------------------------------------------------------------------
+
 DOWNLOADER_MIDDLEWARES = {
     "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,  # disable default
     "webintel_spider.middlewares.PoliteRetryMiddleware": 550,
@@ -68,9 +56,7 @@ DOWNLOADER_MIDDLEWARES = {
     "webintel_spider.middlewares.StatsMiddleware": 900,
 }
 
-# ---------------------------------------------------------------------------
-# Item pipelines
-# ---------------------------------------------------------------------------
+
 ITEM_PIPELINES = {
     "webintel_spider.pipelines.ValidationPipeline": 100,
     "webintel_spider.pipelines.DuplicateFilterPipeline": 200,
@@ -79,16 +65,11 @@ ITEM_PIPELINES = {
     # "webintel_spider.pipelines.AIExtractionPipeline": 400,
 }
 
-# ---------------------------------------------------------------------------
-# Extensions
-# ---------------------------------------------------------------------------
 EXTENSIONS = {
     "webintel_spider.extensions.PeriodicStatsExtension": 500,
 }
 
-# ---------------------------------------------------------------------------
-# Feed exports (optional — JSONL dump alongside DB writes)
-# ---------------------------------------------------------------------------
+
 FEEDS = {
     "output/items-%(time)s.jsonl": {
         "format": "jsonlines",
@@ -99,38 +80,28 @@ FEEDS = {
     },
 }
 
-# ---------------------------------------------------------------------------
-# Depth / breadth limits (safety rails)
-# ---------------------------------------------------------------------------
+
 DEPTH_LIMIT = int(os.getenv("CRAWLER_DEPTH_LIMIT", "3"))
 DEPTH_PRIORITY = 1
 SCHEDULER_DISK_QUEUE = "scrapy.squeues.PickleFifoDiskQueue"
 SCHEDULER_MEMORY_QUEUE = "scrapy.squeues.FifoMemoryQueue"
 SCHEDULER_PRIORITY_QUEUE = "scrapy.pqueues.ScrapyPriorityQueue"
 
-# ---------------------------------------------------------------------------
-# Redirects / compression
-# ---------------------------------------------------------------------------
+
 REDIRECT_ENABLED = True
 REDIRECT_MAX_TIMES = 5
 COMPRESSION_ENABLED = True
 AJAXCRAWL_ENABLED = False
 
-# ---------------------------------------------------------------------------
-# Encoding
-# ---------------------------------------------------------------------------
+
 FEED_EXPORT_ENCODING = "utf-8"
 
-# ---------------------------------------------------------------------------
-# Logging — structured, level via env, stats extension does summaries
-# ---------------------------------------------------------------------------
+
 LOG_LEVEL = os.getenv("CRAWLER_LOG_LEVEL", "INFO")
 LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 LOG_DATEFORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
-# ---------------------------------------------------------------------------
-# Misc
-# ---------------------------------------------------------------------------
+
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 TELNETCONSOLE_ENABLED = False
