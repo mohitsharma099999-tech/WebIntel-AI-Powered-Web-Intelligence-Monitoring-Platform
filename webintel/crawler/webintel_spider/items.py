@@ -14,30 +14,25 @@ def _utcnow() -> str:
 
 @dataclass
 class WebIntelItem(scrapy.Item):
-    """A single scraped page.
+  
+   
+    url: str = scrapy.Field()                    
+    source_url: str = scrapy.Field()             
+    domain: str = scrapy.Field()              
 
-    Uses a dataclass mixin so type-checkers and IDEs understand fields,
-    while still being a real `scrapy.Item` for pipeline compatibility.
-    """
-
-    # -- Identity ----------------------------------------------------------
-    url: str = scrapy.Field()                    # canonical URL
-    source_url: str = scrapy.Field()             # original URL from spider
-    domain: str = scrapy.Field()                 # netloc, for per-domain rules
-
-    # -- Content -----------------------------------------------------------
+    
     title: str = scrapy.Field()
     content: str = scrapy.Field()
-    content_hash: str = scrapy.Field()           # SHA-256 of content
+    content_hash: str = scrapy.Field()          
 
-    # -- Metadata ----------------------------------------------------------
+    
     status_code: int = scrapy.Field()
     content_type: str = scrapy.Field()
     depth: int = scrapy.Field()
-    fetched_at: str = scrapy.Field()             # ISO-8601 UTC
+    fetched_at: str = scrapy.Field()            
     spider_name: str = scrapy.Field()
 
-    # -- Optional AI fields (populated by pipeline) ------------------------
+    
     ai_fields: dict = scrapy.Field()
 
     def set_hash(self) -> None:
